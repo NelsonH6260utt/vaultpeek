@@ -61,6 +61,20 @@ func TestCompare_Different(t *testing.T) {
 	}
 }
 
+func TestCompare_EmptyMaps(t *testing.T) {
+	left := map[string]interface{}{}
+	right := map[string]interface{}{}
+
+	result := diff.Compare(left, right)
+
+	if result.HasDifferences() {
+		t.Error("expected no differences for two empty maps")
+	}
+	if len(result.Identical) != 0 {
+		t.Errorf("expected 0 identical keys, got %d", len(result.Identical))
+	}
+}
+
 func TestSummary_NoDifferences(t *testing.T) {
 	left := map[string]interface{}{"a": "1"}
 	right := map[string]interface{}{"a": "1"}

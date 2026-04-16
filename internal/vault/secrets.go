@@ -62,14 +62,18 @@ func (c *Client) ReadSecret(path string) (SecretData, error) {
 // KVv2DataPath converts a mount and secret path into the KV v2 data API path.
 // e.g. mount="secret", path="myapp/config" -> "secret/data/myapp/config"
 func KVv2DataPath(mount, path string) string {
-	mount = strings.TrimSuffix(mount, "/")
-	path = strings.TrimPrefix(path, "/")
-	return fmt.Sprintf("%s/data/%s", mount, path)
+	return kvv2Path(mount, "data", path)
 }
 
 // KVv2MetaPath converts a mount and secret path into the KV v2 metadata API path.
+// e.g. mount="secret", path="myapp/config" -> "secret/metadata/myapp/config"
 func KVv2MetaPath(mount, path string) string {
+	return kvv2Path(mount, "metadata", path)
+}
+
+// kvv2Path is a helper that builds a KV v2 API path for the given prefix.
+func kvv2Path(mount, prefix, path string) string {
 	mount = strings.TrimSuffix(mount, "/")
 	path = strings.TrimPrefix(path, "/")
-	return fmt.Sprintf("%s/metadata/%s", mount, path)
+	return fmt.Sprintf("%s/%s/%s", mount, prefix, path)
 }

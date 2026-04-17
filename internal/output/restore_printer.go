@@ -43,3 +43,18 @@ func printRestoreResultTo(w io.Writer, r vault.RestoreResult) {
 		fmt.Fprintf(w, "    - %s\n", k)
 	}
 }
+
+// PrintRestoreResults prints the outcome of multiple secret restores to stdout.
+func PrintRestoreResults(results []vault.RestoreResult) {
+	for _, r := range results {
+		PrintRestoreResult(r)
+	}
+
+	successes := 0
+	for _, r := range results {
+		if r.Success {
+			successes++
+		}
+	}
+	fmt.Fprintf(os.Stdout, "\nsummary: %d/%d restored successfully\n", successes, len(results))
+}

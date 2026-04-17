@@ -53,3 +53,21 @@ func FetchAndCompare(
 
 	return left, right, nil
 }
+
+// DiffKeys returns three slices: keys only in left, keys only in right, and
+// keys present in both maps.
+func DiffKeys(left, right SecretMap) (onlyLeft, onlyRight, shared []string) {
+	for k := range left {
+		if _, ok := right[k]; ok {
+			shared = append(shared, k)
+		} else {
+			onlyLeft = append(onlyLeft, k)
+		}
+	}
+	for k := range right {
+		if _, ok := left[k]; !ok {
+			onlyRight = append(onlyRight, k)
+		}
+	}
+	return onlyLeft, onlyRight, shared
+}

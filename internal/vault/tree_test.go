@@ -67,3 +67,11 @@ func TestTreeNode_Flatten_Empty(t *testing.T) {
 		t.Fatalf("expected 0 paths, got %d", len(paths))
 	}
 }
+
+func TestTreeNode_Flatten_Nil(t *testing.T) {
+	var node *TreeNode
+	paths := node.Flatten()
+	if paths != nil {
+		t.Fatalf("expected nil paths for nil node, got %v", paths)
+	}
+}

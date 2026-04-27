@@ -54,3 +54,19 @@ func RenderTemplate(path, tmpl string, data map[string]interface{}) TemplateResu
 		Success:  len(missing) == 0,
 	}
 }
+
+// ListPlaceholders returns all unique placeholder keys found in the given
+// template string, in the order they first appear. This is useful for
+// pre-validating which secret keys a template requires before rendering.
+func ListPlaceholders(tmpl string) []string {
+	seen := make(map[string]bool)
+	var keys []string
+	for _, match := range templateVarRe.FindAllString(tmpl, -1) {
+		key := strings.TrimSpace(match[2 : len(match)-2])
+		if !seen[key] {
+			seen[key] = true
+			keys = append(keys, key)
+		}
+	}
+	return keys
+}
